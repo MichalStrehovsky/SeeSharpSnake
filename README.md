@@ -1,6 +1,6 @@
 # A self-contained C# game in 8 kB
 
-This repo is a complement to my article on building an 8 kB self-contained game in C#. By self-contained I mean _this 8 kB C# game binary doesn't need a .NET runtime to work_. See the article on how that's done.
+This repo is a complement to my [article on building an 8 kB self-contained game in C#](https://medium.com/@MStrehovsky/building-a-self-contained-game-in-c-under-8-kilobytes-74c3cf60ea04?sk=334b06f72dad47f15d0ba0cc6a502487). By self-contained I mean _this 8 kB C# game binary doesn't need a .NET runtime to work_. See the article on how that's done.
 
 The project files and scripts in this repo build the same game (Snake clone) in several different configurations, each with a different size of the output.
 
