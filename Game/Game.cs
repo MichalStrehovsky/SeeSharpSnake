@@ -86,11 +86,11 @@ struct Game
         while (snake.HitTest(foodX, foodY));
     }
 
-    public static void Main()
+    public static unsafe void Main()
     {
         Console.SetWindowSize(FrameBuffer.Width, FrameBuffer.Height);
         Console.SetBufferSize(FrameBuffer.Width, FrameBuffer.Height);
-        Console.Title = "See Sharp Snake";
+        //Console.Title = "See Sharp Snake";
         Console.CursorVisible = false;
 
         FrameBuffer fb = new FrameBuffer();
@@ -100,12 +100,20 @@ struct Game
             Game g = new Game((uint)Environment.TickCount64);
             Result result = g.Run(ref fb);
 
-            string message = result == Result.Win ? "You win" : "You lose";
-
-            int position = (FrameBuffer.Width - message.Length) / 2;
-            for (int i = 0; i < message.Length; i++)
+            if (result == Result.Win)
             {
-                fb.SetPixel(position + i, FrameBuffer.Height / 2, message[i]);
+                const int pos = (FrameBuffer.Width - 3) / 2;
+                fb.SetPixel(pos, FrameBuffer.Height / 2, 'W');
+                fb.SetPixel(pos + 1, FrameBuffer.Height / 2, 'i');
+                fb.SetPixel(pos + 2, FrameBuffer.Height / 2, 'n');
+            }
+            else
+            {
+                const int pos = (FrameBuffer.Width - 4) / 2;
+                fb.SetPixel(pos, FrameBuffer.Height / 2, 'L');
+                fb.SetPixel(pos + 1, FrameBuffer.Height / 2, 'o');
+                fb.SetPixel(pos + 2, FrameBuffer.Height / 2, 's');
+                fb.SetPixel(pos + 3, FrameBuffer.Height / 2, 's');
             }
 
             fb.Render();

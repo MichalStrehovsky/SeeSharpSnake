@@ -1,4 +1,6 @@
-﻿struct Snake
+﻿using System;
+
+struct Snake
 {
     public const int MaxLength = 30;
 
@@ -109,8 +111,7 @@
 
     private static char DirectionToChar(Direction oldDirection, Direction newDirection)
     {
-        const string DirectionChangeToChar = "│┌?┐┘─┐??└│┘└?┌─";
-        return DirectionChangeToChar[(int)oldDirection * 4 + (int)newDirection];
+        return '+';
     }
 
     // Helper struct to pack and unpack the packed integer in _body.

@@ -38,9 +38,9 @@ namespace System
         [DllImport("api-ms-win-core-processenvironment-l1-1-0")]
         private static unsafe extern IntPtr GetStdHandle(int c);
 
-        private readonly static IntPtr s_outputHandle = GetStdHandle(-11);
+        private static IntPtr s_outputHandle => GetStdHandle(-11);
 
-        private readonly static IntPtr s_inputHandle = GetStdHandle(-10);
+        private static IntPtr s_inputHandle => GetStdHandle(-10);
 
         [DllImport("api-ms-win-core-console-l2-1-0.dll", EntryPoint = "SetConsoleTitleW")]
         private static unsafe extern BOOL SetConsoleTitle(char* c);
