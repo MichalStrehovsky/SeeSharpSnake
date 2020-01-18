@@ -19,10 +19,15 @@ namespace System
     public struct UInt32 { }
     public struct Int64 { }
     public struct UInt64 { }
-    public struct IntPtr { }
     public struct UIntPtr { }
     public struct Single { }
     public struct Double { }
+
+    public unsafe struct IntPtr
+    {
+        private void* _value;
+        public IntPtr(void* value) { _value = value; }
+    }
 
     public abstract class ValueType { }
     public abstract class Enum : ValueType { }
@@ -62,6 +67,16 @@ namespace System.Runtime.CompilerServices
     public class RuntimeHelpers
     {
         public static unsafe int OffsetToStringData => sizeof(IntPtr) + sizeof(int);
+    }
+
+    public enum MethodImplOptions
+    {
+        NoInlining = 0x0008,
+    }
+
+    public sealed class MethodImplAttribute : Attribute
+    {
+        public MethodImplAttribute(MethodImplOptions methodImplOptions) { }
     }
 }
 

@@ -54,7 +54,7 @@ dotnet publish -r win-x64 -c Release /p:Mode=CoreRT-ReflectionFree
 2. CD into the repo root directory
 
 ```
-csc.exe /debug /O /noconfig /nostdlib /runtimemetadataversion:v4.0.30319 MiniRuntime.cs MiniBCL.cs Game\FrameBuffer.cs Game\Random.cs Game\Game.cs Game\Snake.cs Pal\Thread.Windows.cs Pal\Environment.Windows.cs Pal\Console.Windows.cs /out:zerosnake.ilexe /langversion:latest /unsafe
+csc.exe /debug /O /noconfig /nostdlib /runtimemetadataversion:v4.0.30319 MiniRuntime.cs MiniBCL.cs Game\FrameBuffer.cs Game\Random.cs Game\Game.cs Game\Snake.cs Pal\Thread.Windows.cs Pal\Environment.Windows.cs Pal\Console.Windows.cs Pal\Console.cs /out:zerosnake.ilexe /langversion:latest /unsafe
 ```
 
 Find ilc.exe (the [CoreRT](http://github.com/dotnet/corert) ahead of time compiler) on your machine. If you completed any of the above steps that produce outputs <= 4.7 MB, ilc.exe will be in your NuGet package cache (somewhere like `%USERPROFILE%\.nuget\packages\runtime.win-x64.microsoft.dotnet.ilcompiler\1.0.0-alpha-27402–01\tools`).

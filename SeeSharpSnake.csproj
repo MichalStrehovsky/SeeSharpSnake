@@ -19,6 +19,7 @@
     <Compile Include="Pal/Thread.Windows.cs" />
     <Compile Include="Pal/Environment.Windows.cs" />
     <Compile Include="Pal/Console.Windows.cs" />
+    <Compile Include="Pal/Console.cs" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(Mode)' != ''">
