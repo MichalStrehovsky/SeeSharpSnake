@@ -68,7 +68,7 @@ namespace System.Runtime.CompilerServices
 
         // This is a special compiler intrinsic that calls method pointed to by pfn.
         [System.Runtime.CompilerServices.Intrinsic]
-        private static extern T Call<T>(System.IntPtr pfn);
+        public static extern T Call<T>(System.IntPtr pfn);
     }
 
     // This data structure is a contract with the compiler. It holds the address of a static

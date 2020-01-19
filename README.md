@@ -4,6 +4,8 @@ This repo is a complement to my [article on building an 8 kB self-contained game
 
 The project files and scripts in this repo build the same game (Snake clone) in several different configurations, each with a different size of the output.
 
+😱 Scroll all the way down for instructions on how to run this on DOS.
+
 ![Snake game](SeeSharpSnake.gif)
 
 ## Building
@@ -77,3 +79,21 @@ In general, I welcome:
 * Bug fixes
 * Making the CSPROJ also handle the 8 kB case so that we don't need to mess with the command prompt
 * Small experience improvements (e.g. handling ESC key to exit the game)
+
+## To build for DOS
+
+Very similar instructions to the 8 kB version:
+
+```
+csc.exe /debug /O /noconfig /nostdlib /runtimemetadataversion:v4.0.30319 MiniRuntime.cs MiniRuntime.Dos.cs  MiniBCL.cs Game\FrameBuffer.cs Game\Random.cs Game\Game.cs Game\Snake.cs Pal\Thread.Dos.cs Pal\Environment.Dos.cs Pal\Console.Dos.cs Pal\Console.cs /out:zerosnake.ilexe /langversion:latest /unsafe
+```
+
+```
+[PATH_TO_ILC_EXE]\ilc.exe zerosnake.ilexe --systemmodule zerosnake -o zerosnake.obj
+```
+
+```
+link /subsystem:native /entry:__managed__Main zerosnake.obj /stub:dos64stb.bin
+```
+
+The DOS64STB blob is https://github.com/Baron-von-Riedesel/Dos64-stub.
