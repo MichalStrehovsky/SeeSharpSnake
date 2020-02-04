@@ -6,6 +6,9 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <PublishSingleFile Condition="'$(Mode)' == ''">true</PublishSingleFile>
     <EnableDefaultItems>false</EnableDefaultItems>
+    <RestoreAdditionalProjectSources>
+      https://dotnetfeed.blob.core.windows.net/dotnet-core/index.json
+    </RestoreAdditionalProjectSources>
   </PropertyGroup>
 
   <ItemGroup>
