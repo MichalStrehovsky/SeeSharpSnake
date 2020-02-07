@@ -62,7 +62,7 @@ csc.exe /debug /O /noconfig /nostdlib /runtimemetadataversion:v4.0.30319 MiniRun
 Find ilc.exe (the [CoreRT](http://github.com/dotnet/corert) ahead of time compiler) on your machine. If you completed any of the above steps that produce outputs <= 4.7 MB, ilc.exe will be in your NuGet package cache (somewhere like `%USERPROFILE%\.nuget\packages\runtime.win-x64.microsoft.dotnet.ilcompiler\1.0.0-alpha-27402–01\tools`).
 
 ```
-[PATH_TO_ILC_EXE]\ilc.exe zerosnake.ilexe -o zerosnake.obj --systemmodule zerosnake --Os -g
+[PATH_TO_ILC_EXE]\ilc.exe zerosnake.ilexe -o zerosnake.obj --systemmodule:zerosnake --Os -g
 ```
 
 ```
