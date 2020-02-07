@@ -22,6 +22,12 @@
     <Compile Include="Pal/Console.cs" />
   </ItemGroup>
 
+  <ItemGroup Condition="'$(Mode)' == 'CoreRT-CustomPal'">
+    <Compile Include="MiniBCL.cs" />
+    <Compile Include="MiniRuntime.cs" />
+    <Compile Include="MiniRuntime.Dos.cs" />
+  </ItemGroup>
+
   <ItemGroup Condition="'$(Mode)' != ''">
     <PackageReference Include="Microsoft.DotNet.ILCompiler" Version="1.0.0-alpha-*" />
   </ItemGroup>
@@ -31,7 +37,7 @@
     <IlcOptimizationPreference>Size</IlcOptimizationPreference>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Mode)' == 'CoreRT-High' or '$(Mode)' == 'CoreRT-ReflectionFree'">
+  <PropertyGroup Condition="'$(Mode)' == 'CoreRT-High' or '$(Mode)' == 'CoreRT-ReflectionFree' or '$(Mode)' == 'CoreRT-CustomPal'">
     <IlcGenerateStackTraceData>false</IlcGenerateStackTraceData>
     <IlcInvariantGlobalization>true</IlcInvariantGlobalization>
     <IlcFoldIdenticalMethodBodies>true</IlcFoldIdenticalMethodBodies>
@@ -46,5 +52,39 @@
     <IlcDisableReflection>true</IlcDisableReflection>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Mode)' == 'CoreRT-CustomPal'">
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <RuntimeMetadataVersion>v4.0.30319</RuntimeMetadataVersion>
+    <Optimize>true</Optimize>
+    <IlcOptimizationPreference>Size</IlcOptimizationPreference>
+    <IlcDisableReflection>true</IlcDisableReflection>
+    <IncludePal>true</IncludePal>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(Mode)' == 'CoreRT-CustomPal'">
+    <IlcArg Include="--systemmodule:SeeSharpSnake" />
+    <LinkerArg Include="/subsystem:console /entry:__managed__Main /merge:.modules=.rdata /merge:.pdata=.rdata /DYNAMICBASE:NO /filealign:16 /align:16" />
+  </ItemGroup>
+
+  <Target Name="CustomPal10KByte" BeforeTargets="IlcCompile" AfterTargets="ComputeIlcCompileInputs" Condition="'$(Mode)' == 'CoreRT-CustomPal'">
+    <ItemGroup>
+      <AutoInitializedAssemblies Remove="System.Private.CoreLib" />
+      <AutoInitializedAssemblies Remove="System.Private.DeveloperExperience.Console" />
+      <AutoInitializedAssemblies Remove="System.Private.TypeLoader" />
+      <AutoInitializedAssemblies Remove="System.Private.DisabledReflection" />
+      <AutoInitializedAssemblies Remove="System.Private.Interop" />
+      <IlcReference Remove="@(IlcReference)" />
+    </ItemGroup>
+  </Target>
+
+  <Target Name="CustomizeReferences" BeforeTargets="BeforeCompile" AfterTargets="FindReferenceAssembliesForReferences" Condition="'$(Mode)' == 'CoreRT-CustomPal'">
+    <ItemGroup>
+      <ReferencePathWithRefAssemblies Remove="@(ReferencePathWithRefAssemblies)" />
+      <ReferencePath Remove="@(ReferencePath)" />
+    </ItemGroup>
+  </Target>
 
 </Project>
