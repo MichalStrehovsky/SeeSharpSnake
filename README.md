@@ -50,6 +50,12 @@ dotnet publish -r win-x64 -c Release /p:Mode=CoreRT-High
 dotnet publish -r win-x64 -c Release /p:Mode=CoreRT-ReflectionFree
 ```
 
+### To build the 10 kB version of the game
+
+```
+dotnet publish -r win-x64 -c Release /p:Mode=CoreRT-NoRuntime
+```
+
 ### To build the 8 kB version of the game
 
 1. Open "x64 Native Tools Command Prompt for VS 2019" (it's in your Start menu)
@@ -89,7 +95,7 @@ csc.exe /debug /O /noconfig /nostdlib /runtimemetadataversion:v4.0.30319 MiniRun
 ```
 
 ```
-[PATH_TO_ILC_EXE]\ilc.exe zerosnake.ilexe --systemmodule zerosnake -o zerosnake.obj
+[PATH_TO_ILC_EXE]\ilc.exe zerosnake.ilexe --systemmodule:zerosnake -o zerosnake.obj
 ```
 
 ```
