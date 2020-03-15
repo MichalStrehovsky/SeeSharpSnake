@@ -22,6 +22,14 @@
     <Compile Include="Pal/Console.cs" />
   </ItemGroup>
 
+  <ItemGroup Condition="'$(IncludePal)' == 'true' and $(RuntimeIdentifier.StartsWith('win-'))">
+    <Compile Include="Pal/RuntimeInformation.Windows.cs" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(IncludePal)' == 'true' and $(RuntimeIdentifier.StartsWith('linux-'))">
+    <Compile Include="Pal/RuntimeInformation.Linux.cs" />
+  </ItemGroup>
+
   <ItemGroup Condition="'$(Mode)' == 'CoreRT-NoRuntime'">
     <Compile Include="MiniBCL.cs" />
     <Compile Include="MiniRuntime.cs" />
