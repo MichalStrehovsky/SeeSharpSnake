@@ -78,6 +78,7 @@
 
     public unsafe readonly void Draw(ref FrameBuffer fb)
     {
+//        Game.PrintLine("draw");
         for (int i = 0; i < _length; i++)
         {
             Part p = Part.Unpack(_body[i]);

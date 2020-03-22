@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using Thread = System.Threading.Thread;
 
 struct Game

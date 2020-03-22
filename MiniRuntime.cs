@@ -3,10 +3,10 @@ namespace Internal.Runtime.CompilerHelpers
     // A class that the compiler looks for that has helpers to initialize the
     // process. The compiler can gracefully handle the helpers not being present,
     // but the class itself being absent is unhandled. Let's add an empty class.
-    class StartupCodeHelpers
+    unsafe class StartupCodeHelpers
     {
-        [System.Runtime.RuntimeExport("RhpReversePInvoke2")]
-        static void RhpReversePInvoke2(System.IntPtr frame) { }
+        //[System.Runtime.RuntimeExport("RhpReversePInvoke2")]
+        ////static void RhpReversePInvoke2(ReversePInvokeFrame *frame) { }
         [System.Runtime.RuntimeExport("RhpReversePInvokeReturn2")]
         static void RhpReversePInvokeReturn2(System.IntPtr frame) { }
         [System.Runtime.RuntimeExport("RhpPInvoke")]
@@ -46,11 +46,11 @@ namespace System.Runtime.CompilerServices
     {
         private static unsafe IntPtr CheckStaticClassConstructionReturnNonGCStaticBase(ref StaticClassConstructionContext context, IntPtr nonGcStaticBase)
         {
-            CheckStaticClassConstruction(ref context);
+            EnsureClassConstructorRun(ref context);
             return nonGcStaticBase;
         }
 
-        private static unsafe void CheckStaticClassConstruction(ref StaticClassConstructionContext context)
+        private static unsafe void EnsureClassConstructorRun(ref StaticClassConstructionContext context)
         {
             // Very simplified class constructor runner. In real world, the class constructor runner
             // would need to be able to deal with potentially multiple threads racing to initialize
