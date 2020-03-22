@@ -43,6 +43,9 @@
         from {transform: rotate(0deg);}
         to {transform: rotate(360deg);}
       }
+      td {
+          padding: 0px;
+      }
 
     </style>
   </head>
@@ -173,6 +176,28 @@
           // Cancel the default action to avoid it being handled twice
           event.preventDefault();
       }, true);
+
+     // js equivalent of console colors
+    //        Black, DarkBlue, DarkGreen, DarkCyan, DarkRed, DarkMagenta, DarkYellow,
+    // Gray, DarkGray, Blue, Green, Cyan, Red, Magenta, Yellow, White
+    var colorMap = {};
+    colorMap[0] = "black";
+    colorMap[1] = "darkblue";
+    colorMap[2] = "green";
+    colorMap[3] = "darkcyan";
+    colorMap[4] = "darkred";
+    colorMap[5] = "darkmagenta";
+    colorMap[6] = "darkyello";
+    colorMap[7] = "gray";
+    colorMap[8] = "darkgray";
+    colorMap[9] = "blue";
+    colorMap[10] = "lightgreen";
+    colorMap[11] = "cyan";
+    colorMap[12] = "red";
+    colorMap[13] = "magenta";
+    colorMap[14] = "yellow";
+    colorMap[15] = "white";
+
     </script>
     {{{ SCRIPT }}}
   </body>

@@ -2,7 +2,7 @@ mergeInto(LibraryManager.library, {
 js_build_table: function(width, height)
 {
     var board = document.getElementById("board");
-    var s= "<table>";
+        var s = "<table style='background-color: black;border-color:red;border-width:1px'>";
     for(var i = 0; i < height; i++)
     {
         s = s + "<tr>";
@@ -15,8 +15,9 @@ js_build_table: function(width, height)
     s = s + "</table>";
     board.innerHTML = s;
     },
-    js_write_char: function(x, y, c) {
+    js_write_char: function(x, y, c, color) {
         var cell = document.getElementById("c" + y + "_" + x);
+        cell.style.color = colorMap[color];
         cell.innerHTML = String.fromCharCode(c);
     },
     js_key_available: function () {
@@ -26,5 +27,11 @@ js_build_table: function(width, height)
         var k = lastKey;
         lastKey = 0;
         return k;
-    }
+    },
+    js_set_title: function () {
+        document.title = "Snake"; // how to pass without brining in marshalling code
+    },
+    js_print_int: function (i) {
+        console.log(i);
+    },
 });

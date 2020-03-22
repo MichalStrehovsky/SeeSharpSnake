@@ -10,15 +10,19 @@ namespace System
             TRUE = 1,
         }
 
+        [DllImport("*")]
+        extern static void js_set_title();
+
         public static unsafe string Title
         {
             set
             {
+                // set dom title
+                js_set_title();
                 /*
                 fixed (char* c = value)
                     SetConsoleTitle(c);
                     */
-                // set dom title
             }
         }
 
@@ -162,11 +166,11 @@ namespace System
 
 
         [DllImport("*")]
-        extern static void js_write_char(int x, int y, int c);
+        extern static void js_write_char(int x, int y, int c, int foregroundColor);
         public static unsafe void Write(char c)
         {
             if(c == ' ') c = (char)160; // nbsp
-            js_write_char(_x, _y, (int)c);
+            js_write_char(_x, _y, (int)c, (int)foregroundColor);
             _x++;
         }
     }

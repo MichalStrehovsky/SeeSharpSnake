@@ -7,6 +7,6 @@ namespace System
         [DllImport("*")]
         private static extern double emscripten_get_now();
 
-        public static long TickCount64 => (long)(emscripten_get_now() / 1000);
+        public static long TickCount64 => (long)(emscripten_get_now());
     }
 }

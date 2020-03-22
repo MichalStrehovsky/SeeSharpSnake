@@ -1,3 +1,17 @@
 bin/
 obj/
 .vs/
+
+*~
+*swp
+/MiniRuntime.a
+*.bc
+/MiniRuntime.o
+/MiniRuntimea
+/zerosnake.html
+/zerosnake.ilexe
+/zerosnake.js
+/SeeSharpSnake.sln
+/zerosnake.pdb
+/zerosnake.txt
+/zerosnake.wasm
