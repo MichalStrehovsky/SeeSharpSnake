@@ -135,7 +135,7 @@ namespace System
                 Bottom = (short)(y - 1),
             };
 
-        //    create dom elements
+            // create dom elements
             js_build_table(x, y);
         }
 
@@ -156,8 +156,6 @@ namespace System
         static int _x, _y;
         public static void SetCursorPosition(int x, int y)
         {
-            //Game.PrintLine("setting x y");
-            //if(x != 0) Game.PrintLine("x not 0");
             _x = x;
             _y = y;
         }
@@ -167,9 +165,7 @@ namespace System
         extern static void js_write_char(int x, int y, int c);
         public static unsafe void Write(char c)
         {
-            //Game.PrintLine("write");
-            if(c == ' ') c = '.';
-            //if(_x != 0) Game.PrintLine("write x not 0");
+            if(c == ' ') c = (char)160; // nbsp
             js_write_char(_x, _y, (int)c);
             _x++;
         }

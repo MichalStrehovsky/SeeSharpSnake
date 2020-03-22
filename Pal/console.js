@@ -26,5 +26,5 @@ js_build_table: function(width, height)
         var k = lastKey;
         lastKey = 0;
         return k;
-    },
+    }
 });
