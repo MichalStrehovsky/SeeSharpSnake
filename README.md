@@ -103,3 +103,30 @@ link /subsystem:native /entry:__managed__Main zerosnake.obj /stub:dos64stb.bin
 ```
 
 The DOS64STB blob is https://github.com/Baron-von-Riedesel/Dos64-stub.
+
+## Run on UEFI
+
+### To build the 11 kB Uefi version of the game
+
+```
+dotnet publish -r win-x64 -c Release /p:Mode=CoreRT-Uefi
+```
+
+This produce UEFI executable stored on the VHDX file in the `bin\x64\Release\netcoreapp3.1\win-x64\native\seesharpsnake.vhdx`
+location, now it's time to create VM out of that VHDX file and launch it.
+
+Open Powershell or Powershell Core session and run commands below.
+
+```powershell
+New-VM -Name SeeSharpSnake -MemoryStartupBytes 32MB -Generation 2 -VHDPath "bin\x64\Release\netcoreapp3.1\win-x64\native\seesharpsnake.vhdx"
+Set-VMFirmware -VMName SeeSharpSnake -EnableSecureBoot Off
+Set-VM -Name SeeSharpSnake -AutomaticCheckpointsEnabled $false -CheckpointType Disabled
+```
+
+and now connect to your VM using
+
+```
+vmconnect localhost SeeSharpSnake
+```
+
+Press Ctrl+S and enjoy!
