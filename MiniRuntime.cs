@@ -33,6 +33,8 @@ namespace System.Runtime
 
 namespace System.Runtime.InteropServices
 {
+    public class UnmanagedType { }
+
     // Custom attribute that marks a class as having special "Call" intrinsics.
     internal class McgIntrinsicsAttribute : Attribute { }
 
@@ -91,5 +93,55 @@ namespace System.Runtime.CompilerServices
         // structure unless initialized == 1. This check is specific to allow the classlibrary to store more
         // than a binary state for each cctor if it so desires.
         public int initialized;
+    }
+
+    [System.Runtime.InteropServices.McgIntrinsicsAttribute]
+    internal class RawCalliHelper
+    {
+        public static unsafe ulong StdCall<T, U, W, X>(IntPtr pfn, T* arg1, U* arg2, W* arg3, X* arg4) where T : unmanaged where U : unmanaged where W : unmanaged where X : unmanaged
+        {
+            // This will be filled in by an IL transform
+            return 0;
+        }
+        public static unsafe ulong StdCall<T, U, W, X>(IntPtr pfn, T arg1, U* arg2, W* arg3, X* arg4) where T : struct where U : unmanaged where W : unmanaged where X : unmanaged
+        {
+            // This will be filled in by an IL transform
+            return 0;
+        }
+        public static unsafe ulong StdCall<T, U, W>(IntPtr pfn, T* arg1, U* arg2, W* arg3) where T : unmanaged where U : unmanaged where W : unmanaged
+        {
+            // This will be filled in by an IL transform
+            return 0;
+        }
+        public static unsafe ulong StdCall<T, U, W>(IntPtr pfn, T arg1, U* arg2, W* arg3) where T : unmanaged where U : unmanaged where W : unmanaged
+        {
+            // This will be filled in by an IL transform
+            return 0;
+        }
+        public static unsafe ulong StdCall<T, U, W>(IntPtr pfn, T* arg1, U arg2, W arg3) where T : unmanaged where U : unmanaged where W : unmanaged
+        {
+            // This will be filled in by an IL transform
+            return 0;
+        }
+        public static unsafe ulong StdCall<T, U>(IntPtr pfn, T* arg1, U* arg2) where T : unmanaged where U : unmanaged
+        {
+            // This will be filled in by an IL transform
+            return 0;
+        }
+        public static unsafe ulong StdCall<T, U>(IntPtr pfn, T* arg1, U arg2) where T : unmanaged where U : unmanaged
+        {
+            // This will be filled in by an IL transform
+            return 0;
+        }
+        public static unsafe ulong StdCall<T>(IntPtr pfn, T* arg1) where T : unmanaged
+        {
+            // This will be filled in by an IL transform
+            return 0;
+        }
+        public static unsafe ulong StdCall<T>(IntPtr pfn, T arg1) where T : unmanaged
+        {
+            // This will be filled in by an IL transform
+            return 0;
+        }
     }
 }
