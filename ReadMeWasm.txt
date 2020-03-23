@@ -13,10 +13,3 @@ csc.exe /debug /O /noconfig /nostdlib /runtimemetadataversion:v4.0.30319 MiniRun
 
 "E:\GitHub\emsdk\upstream\emscripten\emcc.bat" "zerosnake.bc" -o "zerosnake.html" -s WASM=1 --emrun MiniRuntime.bc -s ASYNCIFY=1 --js-library pal\console.js --shell-file pal\shell_minimal.html -Os --llvm-lto 3
 
-Problems:
-
-Title not implemented
-Colours not implemented
-Slows down with time
-Font should be fixed space
-replace .s with &nbsp, or space and fixed the td width.
