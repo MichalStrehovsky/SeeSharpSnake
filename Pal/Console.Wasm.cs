@@ -2,48 +2,25 @@ using System.Runtime.InteropServices;
 
 namespace System
 {
-    static class Console
+    static unsafe class Console
     {
-        private enum BOOL : int
-        {
-            FALSE = 0,
-            TRUE = 1,
-        }
-
         [DllImport("*")]
-        extern static void js_set_title();
-
+        extern static void js_set_title(char *c);
         public static unsafe string Title
         {
             set
             {
                 // set dom title
-                js_set_title();
-                /*
                 fixed (char* c = value)
-                    SetConsoleTitle(c);
-                    */
+                   js_set_title(c);
             }
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        struct CONSOLE_CURSOR_INFO
-        {
-            public uint Size;
-            public BOOL Visible;
         }
 
         public static unsafe bool CursorVisible
         {
             set
             {
-                CONSOLE_CURSOR_INFO cursorInfo = new CONSOLE_CURSOR_INFO
-                {
-                    Size = 1,
-                    Visible = value ? BOOL.TRUE : BOOL.FALSE
-                };
-//TODO: whats this for?/
-                // SetConsoleCursorInfo(s_outputHandle, &cursorInfo);
+                // html table has no cursor
             }
         }
 
@@ -56,74 +33,33 @@ namespace System
             }
         }
 
-        [StructLayout(LayoutKind.Sequential)]
-        private struct KEY_EVENT_RECORD
-        {
-            public BOOL KeyDown;
-            public short RepeatCount;
-            public short VirtualKeyCode;
-            public short VirtualScanCode;
-            public short UChar;
-            public int ControlKeyState;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        private struct INPUT_RECORD
-        {
-            public short EventType;
-            public KEY_EVENT_RECORD KeyEvent;
-        }
-
         [DllImport("*")]
         extern static int js_key_available();
         public static unsafe bool KeyAvailable
         {
             get
             {
-
                 return js_key_available() != 0;
-                /*
-                uint nRead;
-                INPUT_RECORD buffer;
-                while (true)
-                {
-                     //EMSCRIPTEN_RESULT ret = emscripten_set_keypress_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, 0, 1, key_callback);
-                    PeekConsoleInput(s_inputHandle, &buffer, 1, &nRead);
-
-                    if (nRead == 0)
-                        return false;
-
-                    if (buffer.EventType == 1 && buffer.KeyEvent.KeyDown != BOOL.FALSE)
-                        return true;
-
-                    ReadConsoleInput(s_inputHandle, &buffer, 1, &nRead);
-                }
-                */
             }
         }
 
         [DllImport("*")]
+        extern static void emscripten_sleep(uint ms);
+        [DllImport("*")]
         extern static int js_read_key();
         public static unsafe ConsoleKeyInfo ReadKey(bool intercept)
         {
-            /*
-            uint nRead;
-            INPUT_RECORD buffer;
-            do
+            int k;
+            if (intercept)
             {
-                ReadConsoleInput(s_inputHandle, &buffer, 1, &nRead);
+                while ((k = js_read_key()) == 0)
+                {
+                    emscripten_sleep(100);
+                }
             }
-            while (buffer.EventType != 1 || buffer.KeyEvent.KeyDown == BOOL.FALSE);
+            else k = js_read_key();
 
-
-            return new ConsoleKeyInfo((char)Event.UChar, (ConsoleKey)buffer.KeyEvent.VirtualKeyCode, false, false, false);
-            */
-            return new ConsoleKeyInfo((char)0, (ConsoleKey)js_read_key(), false, false, false);
-        }
-
-        struct SMALL_RECT
-        {
-            public short Left, Top, Right, Bottom;
+            return new ConsoleKeyInfo((char)0, (ConsoleKey)k, false, false, false);
         }
 
         [DllImport("*")]
@@ -131,31 +67,16 @@ namespace System
 
         public static unsafe void SetWindowSize(int x, int y)
         {
-            SMALL_RECT rect = new SMALL_RECT
-            {
-                Left = 0,
-                Top = 0,
-                Right = (short)(x - 1),
-                Bottom = (short)(y - 1),
-            };
-
             // create dom elements
             js_build_table(x, y);
         }
 
-        [StructLayout(LayoutKind.Sequential)]
-        struct COORD
-        {
-            public short X, Y;
-        }
-
-
         public static void SetBufferSize(int x, int y)
         {
-            //TODO : delete?
-//            SetConsoleScreenBufferSize(s_outputHandle, new COORD { X = (short)x, Y = (short)y });
         }
 
+        [DllImport("*")]
+        extern static void js_print_int(int i);
 
         static int _x, _y;
         public static void SetCursorPosition(int x, int y)
@@ -163,7 +84,6 @@ namespace System
             _x = x;
             _y = y;
         }
-
 
         [DllImport("*")]
         extern static void js_write_char(int x, int y, int c, int foregroundColor);

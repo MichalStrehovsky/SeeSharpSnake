@@ -42,7 +42,7 @@ unsafe struct FrameBuffer
 
             if (i % Width == 0)
             {
-                Console.SetCursorPosition(0, i / Width - 1);
+                Console.SetCursorPosition(0, i / Width);
             }
         }
     }

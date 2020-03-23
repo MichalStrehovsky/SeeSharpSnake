@@ -1,21 +1,21 @@
 mergeInto(LibraryManager.library, {
-js_build_table: function(width, height)
-{
-    var board = document.getElementById("board");
-        var s = "<table style='background-color: black;border-color:red;border-width:1px'>";
-    for(var i = 0; i < height; i++)
+    js_build_table: function(width, height)
     {
-        s = s + "<tr>";
-        for(var j = 0; j < width; j++)
+        var board = document.getElementById("board");
+        var s = "<table style='background-color: black;border:1px solid red;'>";
+        for(var i = 0; i < height; i++)
         {
-            s = s + "<td id='c" + i + "_" + j + "'>&nbsp;</td>";
+            s = s + "<tr>";
+            for(var j = 0; j < width; j++)
+            {
+                s = s + "<td id='c" + i + "_" + j + "'>&nbsp;</td>";
+            }
+            s = s + "</tr>";
         }
-        s = s + "</tr>";
-    }
-    s = s + "</table>";
-    board.innerHTML = s;
+        s = s + "</table>";
+        board.innerHTML = s;
     },
-    js_write_char: function(x, y, c, color) {
+    js_write_char: function (x, y, c, color) {
         var cell = document.getElementById("c" + y + "_" + x);
         cell.style.color = colorMap[color];
         cell.innerHTML = String.fromCharCode(c);
@@ -28,10 +28,8 @@ js_build_table: function(width, height)
         lastKey = 0;
         return k;
     },
-    js_set_title: function () {
-        document.title = "Snake"; // how to pass without brining in marshalling code
-    },
-    js_print_int: function (i) {
-        console.log(i);
-    },
+    js_set_title: function (s) {
+        var t = UTF16ToString(s);
+        document.title = t;
+    }
 });

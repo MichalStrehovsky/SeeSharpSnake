@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en-us">
   <head>
     <meta charset="utf-8">
@@ -50,17 +50,15 @@
     </style>
   </head>
   <body>
-    <hr/>
     <figure style="overflow:visible;" id="spinner"><div class="spinner"></div><center style="margin-top:0.5em"><strong>emscripten</strong></center></figure>
     <div class="emscripten" id="status">Downloading...</div>
     <div class="emscripten">
       <progress value="0" max="100" id="progress" hidden=1></progress>  
     </div>
-    <div class="emscripten_border">
+    <div class="emscripten_border" style="display:none">
       <canvas class="emscripten" id="canvas" oncontextmenu="event.preventDefault()" tabindex=-1></canvas>
     </div>
-    <hr/>
-    <div class="emscripten">
+    <div class="emscripten" style="display:none">
       <input type="checkbox" id="resize">Resize canvas
       <input type="checkbox" id="pointerLock" checked>Lock/hide mouse pointer
       &nbsp;&nbsp;&nbsp;
@@ -68,10 +66,8 @@
                                                                                 document.getElementById('resize').checked)">
     </div>
     
-    <hr/>
     <div id="board" style="font-family: monospace;"></div>
-    <textarea class="emscripten" id="output" rows="8"></textarea>
-    <hr>
+    <textarea class="emscripten" id="output" rows="8" style="display:none"></textarea>
     <script type='text/javascript'>
       var statusElement = document.getElementById('status');
       var progressElement = document.getElementById('progress');
@@ -149,30 +145,14 @@
       };
 
 
-        var lastKey;
-        lastKey = 0;
+      var lastKey;
+      lastKey = 0;
       window.addEventListener("keydown", function (event) {
           if (event.defaultPrevented) {
               return; // Do nothing if the event was already processed
           }
 
-          switch (event.key) {
-          case "ArrowDown":
-              lastKey = event.keyCode;
-              break;
-          case "ArrowUp":
-              lastKey = event.keyCode;
-              break;
-          case "ArrowLeft":
-              lastKey = event.keyCode;
-              break;
-          case "ArrowRight":
-              lastKey = event.keyCode;
-              break;
-          default:
-              return; // Quit when this doesn't handle the key event.
-          }
-
+          lastKey = event.keyCode;
           // Cancel the default action to avoid it being handled twice
           event.preventDefault();
       }, true);
