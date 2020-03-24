@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using Thread = System.Threading.Thread;
 
 struct Game
@@ -88,10 +89,13 @@ struct Game
 
     public static void Main()
     {
-        Console.SetWindowSize(FrameBuffer.Width, FrameBuffer.Height);
-        Console.SetBufferSize(FrameBuffer.Width, FrameBuffer.Height);
-        Console.Title = "See Sharp Snake";
-        Console.CursorVisible = false;
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            Console.SetWindowSize(FrameBuffer.Width, FrameBuffer.Height);
+            Console.SetBufferSize(FrameBuffer.Width, FrameBuffer.Height);
+            Console.Title = "See Sharp Snake";
+            Console.CursorVisible = false;
+        }
 
         FrameBuffer fb = new FrameBuffer();
 
