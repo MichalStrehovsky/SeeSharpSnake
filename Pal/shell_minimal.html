@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en-us">
   <head>
     <meta charset="utf-8">
@@ -156,6 +156,27 @@
           // Cancel the default action to avoid it being handled twice
           event.preventDefault();
       }, true);
+
+      var board = document.getElementById('board');
+
+        board.addEventListener('touchstart', function (event) {
+          // ought to cache this stuff
+            var table = board.firstChild;
+            var gradient = table.clientHeight / table.clientWidth;
+
+            if (event.targetTouches.length == 1) {
+                var touch = event.targetTouches[0];
+
+                var tr = false;
+                var tl = false;
+                if (touch.pageY < touch.pageX * gradient) tr = true;
+                if (touch.pageY < table.clientHeight - touch.pageX * gradient) tl = true;
+                if (tl && tr) lastKey = 38;
+                else if (tl && !tr) lastKey = 37;
+                else if (tr) lastKey = 39;
+                else lastKey = 40;
+            }
+        }, false);
 
      // js equivalent of console colors
     //        Black, DarkBlue, DarkGreen, DarkCyan, DarkRed, DarkMagenta, DarkYellow,
