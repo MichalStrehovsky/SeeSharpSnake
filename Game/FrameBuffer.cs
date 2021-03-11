@@ -21,15 +21,16 @@ unsafe struct FrameBuffer
 
     public readonly void Render()
     {
-        Console.SetCursorPosition(0, 0);
-
         const ConsoleColor snakeColor = ConsoleColor.Green;
 
         Console.ForegroundColor = snakeColor;
 
-        for (int i = 1; i <= Area; i++)
+        for (int i = 0; i < Area; i++)
         {
-            char c = _chars[i - 1];
+            if (i % Width == 0)
+                Console.SetCursorPosition(0, i / Width);
+
+            char c = _chars[i];
 
             if (c == '*' || (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'))
             {
@@ -39,11 +40,6 @@ unsafe struct FrameBuffer
             }
             else
                 Console.Write(c);
-
-            if (i % Width == 0)
-            {
-                Console.SetCursorPosition(0, i / Width);
-            }
         }
     }
 }
