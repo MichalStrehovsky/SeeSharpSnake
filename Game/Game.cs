@@ -91,8 +91,8 @@ struct Game
     {
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
-            Console.SetWindowSize(FrameBuffer.Width, FrameBuffer.Height);
-            Console.SetBufferSize(FrameBuffer.Width, FrameBuffer.Height);
+            Console.SetWindowSize(FrameBuffer.Width, FrameBuffer.Height + 1);
+            Console.SetBufferSize(FrameBuffer.Width, FrameBuffer.Height + 1);
             Console.Title = "See Sharp Snake";
             Console.CursorVisible = false;
         }
