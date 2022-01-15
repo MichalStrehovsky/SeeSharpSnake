@@ -1,4 +1,7 @@
-﻿struct Snake
+﻿using System;
+using SeeSharpSnake;
+
+unsafe struct Snake
 {
     public const int MaxLength = 30;
 
@@ -26,7 +29,7 @@
 
     public unsafe Snake(byte x, byte y, Direction direction)
     {
-        _body[0] = new Part(x, y, DirectionToChar(direction, direction)).Pack();
+        _body[0] = new Part(x, y, DirectionToSprite(direction, direction)).Pack();
         _direction = direction;
         _oldDirection = direction;
         _length = 1;
@@ -38,20 +41,20 @@
         Part newHead = new Part(
             (byte)(_direction switch
             {
-                Direction.Left => oldHead.X == 0 ? FrameBuffer.Width - 1 : oldHead.X - 1,
-                Direction.Right => (oldHead.X + 1) % FrameBuffer.Width,
+                Direction.Left => oldHead.X == 0 ? Game.boardWidth - 1 : oldHead.X - 1,
+                Direction.Right => (oldHead.X + 1) % Game.boardHeight,
                 _ => oldHead.X,
             }),
             (byte)(_direction switch
             {
-                Direction.Up => oldHead.Y == 0 ? FrameBuffer.Height - 1 : oldHead.Y - 1,
-                Direction.Down => (oldHead.Y + 1) % FrameBuffer.Height,
+                Direction.Up => oldHead.Y == 0 ? Game.boardWidth - 1 : oldHead.Y - 1,
+                Direction.Down => (oldHead.Y + 1) % Game.boardHeight,
                 _ => oldHead.Y,
             }),
-            DirectionToChar(_direction, _direction)
+            DirectionToSprite(_direction, _direction)
             );
 
-        oldHead = new Part(oldHead.X, oldHead.Y, DirectionToChar(_oldDirection, _direction));
+        oldHead = new Part(oldHead.X, oldHead.Y, DirectionToSprite(_oldDirection, _direction));
 
         bool result = true;
 
@@ -76,13 +79,16 @@
         return result;
     }
 
-    public unsafe readonly void Draw(ref FrameBuffer fb)
+    // divide w4 into 40x40, each square 4x4 pixels
+    public readonly void Draw()
     {
-//        Game.PrintLine("draw");
         for (int i = 0; i < _length; i++)
         {
             Part p = Part.Unpack(_body[i]);
-            fb.SetPixel(p.X, p.Y, p.Character);
+            fixed (byte* spriteAddress = &(DirectionSprites[0]))
+            {
+                W4.blit(spriteAddress, p.X << 2, p.Y << 2, 4, 4, W4.BLIT_1BPP);
+            }
         }
     }
 
@@ -108,27 +114,41 @@
         return false;
     }
 
-    private static char DirectionToChar(Direction oldDirection, Direction newDirection)
+    static readonly byte[] DirectionSprites = new byte[]
     {
-        const string DirectionChangeToChar = "│┌?┐┘─┐??└│┘└?┌─";
-        return DirectionChangeToChar[(int)oldDirection * 4 + (int)newDirection];
+        0b11111111,
+        0b11111111,
+    };
+
+    //TODO:
+    // create sprites for these and place in DirectionSprites "│┌?┐┘─┐??└│┘└?┌─";
+    private static byte DirectionToSprite(Direction oldDirection, Direction newDirection)
+    {
+        return 0;
+        // byte* a;
+        // fixed (byte* t = DirectionSprites)
+        // {
+        //     a = t;
+        // }
+        //
+        // return a;
     }
 
     // Helper struct to pack and unpack the packed integer in _body.
-    readonly struct Part
+    readonly unsafe struct Part
     {
         public readonly byte X, Y;
-        public readonly char Character;
+        public readonly byte SpriteIx;
 
-        public Part(byte x, byte y, char c)
+        public Part(byte x, byte y, byte spriteIx)
         {
             X = x;
             Y = y;
-            Character = c;
+            SpriteIx = spriteIx;
         }
 
-        public int Pack() => X << 24 | Y << 16 | Character;
-        public static Part Unpack(int packed) => new Part((byte)(packed >> 24), (byte)(packed >> 16), (char)packed);
+        public int Pack() => X << 24 | Y << 16 | SpriteIx;
+        public static Part Unpack(int packed) => new Part((byte)(packed >> 24), (byte)(packed >> 16), (byte)packed);
     }
 
     public enum Direction

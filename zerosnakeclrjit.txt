@@ -1,0 +1,347 @@
+; ModuleID = 'netscripten-clrjit'
+source_filename = "netscripten-clrjit"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-unknown"
+
+@__Str_You_lose_8FCE10111331EFAA78AC965D88ED5C6FC1DEE6B6408A9473F9D05314E707FB22___SYMBOL = external constant i32*
+@__Str_You_win_3B962C67DDE260B72E445A27E41529EBE90453956BDF042DF48760A897DEFED6___SYMBOL = external constant i32*
+
+declare void @Internal_CompilerGenerated__Module___NativeLibraryStartup(i8*)
+
+define void @zerosnake_Internal_Runtime_CompilerHelpers_StartupCodeHelpers__RhpPinvokeReturn(i8* %0, i32 %1) {
+Prolog:
+  br label %2
+
+2:                                                ; preds = %Prolog
+  br label %3
+
+3:                                                ; preds = %2
+  ret void
+}
+
+define void @zerosnake_Internal_Runtime_CompilerHelpers_StartupCodeHelpers__RhpPinvoke(i8* %0, i32 %1) {
+Prolog:
+  br label %2
+
+2:                                                ; preds = %Prolog
+  br label %3
+
+3:                                                ; preds = %2
+  ret void
+}
+
+declare void @zerosnake_Game__update(i8*)
+
+define void @zerosnake_Game__Main(i8* %0) {
+Prolog:
+  br label %1
+
+1:                                                ; preds = %Prolog
+  br label %2
+
+2:                                                ; preds = %1
+  %3 = getelementptr i8, i8* %0, i32 0
+  %4 = bitcast i8* %3 to i8**
+  %5 = load i8*, i8** %4, align 4
+  %6 = getelementptr i8, i8* %0, i32 16
+  %7 = getelementptr i8, i8* %0, i32 16
+  %8 = bitcast i8* %7 to i8**
+  store i8* %5, i8** %8, align 4
+  %9 = call i32 @zerosnake_Game__Update(i8* %6)
+  %10 = icmp eq i32 %9, 2
+  br i1 %10, label %13, label %11
+
+11:                                               ; preds = %2
+  %12 = icmp eq i32 %9, 0
+  br i1 %12, label %19, label %14
+
+13:                                               ; preds = %45, %2
+  ret void
+
+14:                                               ; preds = %11
+  %15 = load i32*, i32** @__Str_You_lose_8FCE10111331EFAA78AC965D88ED5C6FC1DEE6B6408A9473F9D05314E707FB22___SYMBOL, align 4
+  %16 = getelementptr i8, i8* %0, i32 12
+  %17 = bitcast i8* %16 to i8**
+  %18 = bitcast i32* %15 to i8*
+  store i8* %18, i8** %17, align 4
+  br label %24
+
+19:                                               ; preds = %11
+  %20 = load i32*, i32** @__Str_You_win_3B962C67DDE260B72E445A27E41529EBE90453956BDF042DF48760A897DEFED6___SYMBOL, align 4
+  %21 = getelementptr i8, i8* %0, i32 12
+  %22 = bitcast i8* %21 to i8**
+  %23 = bitcast i32* %20 to i8*
+  store i8* %23, i8** %22, align 4
+  br label %24
+
+24:                                               ; preds = %19, %14
+  %25 = getelementptr i8, i8* %0, i32 12
+  %26 = bitcast i8* %25 to i8**
+  %27 = load i8*, i8** %26, align 4
+  %28 = getelementptr i8, i8* %0, i32 4
+  %29 = bitcast i8* %28 to i8**
+  store i8* %27, i8** %29, align 4
+  %30 = getelementptr i8, i8* %0, i32 4
+  %31 = bitcast i8* %30 to i8**
+  %32 = load i8*, i8** %31, align 4
+  %33 = getelementptr i8, i8* %0, i32 8
+  %34 = bitcast i8* %33 to i8**
+  store i8* %32, i8** %34, align 4
+  %35 = getelementptr i8, i8* %0, i32 8
+  %36 = bitcast i8* %35 to i8**
+  %37 = load i8*, i8** %36, align 4
+  %38 = icmp eq i8* %37, null
+  %39 = ptrtoint i8* %37 to i32
+  br i1 %38, label %45, label %40
+
+40:                                               ; preds = %24
+  %41 = getelementptr i8, i8* %0, i32 16
+  %42 = call i32 @zerosnake_System_Runtime_CompilerServices_RuntimeHelpers__get_OffsetToStringData(i8* %41)
+  %43 = getelementptr i8, i8* %37, i32 %42
+  %44 = ptrtoint i8* %43 to i32
+  br label %45
+
+45:                                               ; preds = %40, %24
+  %46 = phi i32 [ %44, %40 ], [ %39, %24 ]
+  %47 = getelementptr i8, i8* %0, i32 4
+  %48 = bitcast i8* %47 to i8**
+  %49 = load i8*, i8** %48, align 4
+  %50 = getelementptr i8, i8* %49, i32 4
+  %51 = bitcast i8* %50 to i32*
+  %52 = load i32, i32* %51, align 4
+  %lsh = shl i32 %52, 1
+  %53 = getelementptr i8, i8* %0, i32 16
+  %54 = inttoptr i32 %46 to i8*
+  call void @zerosnake_SeeSharpSnake_W4__textUtf16(i8* %53, i8* %54, i32 %lsh, i32 70, i32 40)
+  %55 = getelementptr i8, i8* %0, i32 8
+  %56 = bitcast i8* %55 to i8**
+  store i8* null, i8** %56, align 4
+  br label %13
+}
+
+declare i32 @zerosnake_Game__Update(i8*)
+
+define i32 @zerosnake_System_Runtime_CompilerServices_RuntimeHelpers__get_OffsetToStringData(i8* %0) {
+Prolog:
+  br label %1
+
+1:                                                ; preds = %Prolog
+  br label %2
+
+2:                                                ; preds = %1
+  ret i32 8
+}
+
+declare void @zerosnake_SeeSharpSnake_W4__textUtf16(i8*, i8*, i32, i32, i32)
+
+define void @Object___ctor(i8* %0) {
+Prolog:
+  br label %1
+
+1:                                                ; preds = %Prolog
+  br label %2
+
+2:                                                ; preds = %1
+  ret void
+}
+
+define void @String___ctor(i8* %0) {
+Prolog:
+  br label %1
+
+1:                                                ; preds = %Prolog
+  br label %2
+
+2:                                                ; preds = %1
+  %3 = getelementptr i8, i8* %0, i32 0
+  %4 = bitcast i8* %3 to i8**
+  %5 = load i8*, i8** %4, align 4
+  %6 = getelementptr i8, i8* %0, i32 4
+  %7 = getelementptr i8, i8* %0, i32 4
+  %8 = bitcast i8* %7 to i8**
+  store i8* %5, i8** %8, align 4
+  call void @Object___ctor(i8* %6)
+  ret void
+}
+
+define void @zerosnake_Internal_Runtime_CompilerHelpers_ThrowHelpers__ThrowNullReferenceException(i8* %0) {
+Prolog:
+  br label %1
+
+1:                                                ; preds = %Prolog
+  br label %2
+
+2:                                                ; preds = %1
+  ret void
+}
+
+declare i32 @zerosnake_Random__Next(i8*)
+
+define void @zerosnake_Random___ctor(i8* %0, i32 %1) {
+Prolog:
+  br label %2
+
+2:                                                ; preds = %Prolog
+  br label %3
+
+3:                                                ; preds = %2
+  %4 = getelementptr i8, i8* %0, i32 0
+  %5 = bitcast i8* %4 to i8**
+  %6 = load i8*, i8** %5, align 4
+  %7 = bitcast i8* %6 to i32*
+  store i32 %1, i32* %7, align 4
+  ret void
+}
+
+declare void @zerosnake_SeeSharpSnake_Game_Music__AddNote(i8*, i32, i32, i32)
+
+define i32 @zerosnake_Snake_Part__Pack(i8* %0) {
+Prolog:
+  br label %1
+
+1:                                                ; preds = %Prolog
+  br label %2
+
+2:                                                ; preds = %1
+  %3 = getelementptr i8, i8* %0, i32 0
+  %4 = bitcast i8* %3 to i8**
+  %5 = load i8*, i8** %4, align 4
+  %6 = load i8, i8* %5, align 1
+  %7 = zext i8 %6 to i32
+  %lsh = shl i32 %7, 24
+  %8 = getelementptr i8, i8* %0, i32 0
+  %9 = bitcast i8* %8 to i8**
+  %10 = load i8*, i8** %9, align 4
+  %11 = getelementptr i8, i8* %10, i32 1
+  %12 = load i8, i8* %11, align 1
+  %13 = zext i8 %12 to i32
+  %lsh1 = shl i32 %13, 16
+  %or = or i32 %lsh, %lsh1
+  %14 = getelementptr i8, i8* %0, i32 0
+  %15 = bitcast i8* %14 to i8**
+  %16 = load i8*, i8** %15, align 4
+  %17 = getelementptr i8, i8* %16, i32 2
+  %18 = load i8, i8* %17, align 1
+  %19 = zext i8 %18 to i32
+  %or2 = or i32 %or, %19
+  ret i32 %or2
+}
+
+define void @zerosnake_Snake_Part___ctor(i8* %0, i8 %1, i8 %2, i8 %3) {
+Prolog:
+  br label %4
+
+4:                                                ; preds = %Prolog
+  br label %5
+
+5:                                                ; preds = %4
+  %6 = getelementptr i8, i8* %0, i32 0
+  %7 = bitcast i8* %6 to i8**
+  %8 = load i8*, i8** %7, align 4
+  store i8 %1, i8* %8, align 1
+  %9 = getelementptr i8, i8* %0, i32 0
+  %10 = bitcast i8* %9 to i8**
+  %11 = load i8*, i8** %10, align 4
+  %12 = getelementptr i8, i8* %11, i32 1
+  store i8 %2, i8* %12, align 1
+  %13 = getelementptr i8, i8* %0, i32 0
+  %14 = bitcast i8* %13 to i8**
+  %15 = load i8*, i8** %14, align 4
+  %16 = getelementptr i8, i8* %15, i32 2
+  store i8 %3, i8* %16, align 1
+  ret void
+}
+
+define i8 @zerosnake_Snake__DirectionToSprite(i8* %0, i32 %1, i32 %2) {
+Prolog:
+  br label %3
+
+3:                                                ; preds = %Prolog
+  br label %4
+
+4:                                                ; preds = %3
+  %5 = trunc i32 0 to i8
+  ret i8 %5
+}
+
+declare void @zerosnake_Snake__set_Course(i8*, i32)
+
+define void @"zerosnake_System_Array_1<UInt8>___ctor"(i8* %0) {
+Prolog:
+  br label %1
+
+1:                                                ; preds = %Prolog
+  br label %2
+
+2:                                                ; preds = %1
+  %3 = getelementptr i8, i8* %0, i32 0
+  %4 = bitcast i8* %3 to i8**
+  %5 = load i8*, i8** %4, align 4
+  %6 = getelementptr i8, i8* %0, i32 4
+  %7 = getelementptr i8, i8* %0, i32 4
+  %8 = bitcast i8* %7 to i8**
+  store i8* %5, i8** %8, align 4
+  call void @zerosnake_System_Array___ctor(i8* %6)
+  ret void
+}
+
+define void @zerosnake_System_Array___ctor(i8* %0) {
+Prolog:
+  br label %1
+
+1:                                                ; preds = %Prolog
+  br label %2
+
+2:                                                ; preds = %1
+  %3 = getelementptr i8, i8* %0, i32 0
+  %4 = bitcast i8* %3 to i8**
+  %5 = load i8*, i8** %4, align 4
+  %6 = getelementptr i8, i8* %0, i32 4
+  %7 = getelementptr i8, i8* %0, i32 4
+  %8 = bitcast i8* %7 to i8**
+  store i8* %5, i8** %8, align 4
+  call void @Object___ctor(i8* %6)
+  ret void
+}
+
+define i8 @zerosnake_Snake__Extend(i8* %0) {
+Prolog:
+  br label %1
+
+1:                                                ; preds = %Prolog
+  br label %2
+
+2:                                                ; preds = %1
+  %3 = getelementptr i8, i8* %0, i32 0
+  %4 = bitcast i8* %3 to i8**
+  %5 = load i8*, i8** %4, align 4
+  %6 = bitcast i8* %5 to i32*
+  %7 = load i32, i32* %6, align 4
+  %8 = icmp sge i32 %7, 30
+  br i1 %8, label %21, label %9
+
+9:                                                ; preds = %2
+  %10 = getelementptr i8, i8* %0, i32 0
+  %11 = bitcast i8* %10 to i8**
+  %12 = load i8*, i8** %11, align 4
+  %13 = bitcast i8* %12 to i32*
+  %14 = load i32, i32* %13, align 4
+  %15 = add i32 %14, 1
+  %16 = getelementptr i8, i8* %0, i32 0
+  %17 = bitcast i8* %16 to i8**
+  %18 = load i8*, i8** %17, align 4
+  %19 = bitcast i8* %18 to i32*
+  store i32 %15, i32* %19, align 4
+  %20 = trunc i32 1 to i8
+  ret i8 %20
+
+21:                                               ; preds = %2
+  %22 = trunc i32 0 to i8
+  ret i8 %22
+}
+
+declare i8 @zerosnake_Snake__HitTest(i8*, i32, i32)
+
+declare void @zerosnake_SeeSharpSnake_Game_Music__PlayTune(i8*)
+
+declare i8* @__GetNonGCStaticBase_zerosnake_SeeSharpSnake_Game_Music(i8*)

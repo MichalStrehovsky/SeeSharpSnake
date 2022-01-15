@@ -1,117 +1,129 @@
 ﻿using System;
-using System.Runtime.InteropServices;
-using Thread = System.Threading.Thread;
+using SeeSharpSnake;
+using SeeSharpSnake.Game;
 
-struct Game
+unsafe struct Game
 {
+    static Music music;
+
     enum Result
     {
-        Win, Loss
+        Win, Loss, None
     }
 
-    private Random _random;
+    static Game game;
+
+    // sprites are 4x4
+    internal const byte boardWidth = 40;
+    internal const byte boardHeight = 40; 
+
+    static Random _random;
+
+    Snake s;
+    byte foodX, foodY;
+
+    static readonly byte[] foodSprite = new byte[]
+    {
+        0b10100101,
+        0b10100101,
+    };
+    static readonly byte[] foodSprite2 = new byte[]
+    {
+        0b11111111,
+        0b11111111,
+    };
+
+    /// <summary>
+    ///  runs once at startup
+    /// </summary>
+    [System.Runtime.InteropServices.UnmanagedCallersOnly(EntryPoint = "start")]
+    public static void start()
+    {
+        game = new Game(42);
+    }
+
+    [System.Runtime.InteropServices.UnmanagedCallersOnly(EntryPoint = "update")]
+    public static void update()
+    {
+        game.Main();
+    }
+
 
     private Game(uint randomSeed)
     {
         _random = new Random(randomSeed);
-    }
-
-    private Result Run(ref FrameBuffer fb)
-    {
-        Snake s = new Snake(
-            (byte)(_random.Next() % FrameBuffer.Width),
-            (byte)(_random.Next() % FrameBuffer.Height),
+        music.SetUp();
+        s = new Snake(
+            (byte)(_random.Next() % boardWidth),
+            (byte)(_random.Next() % boardHeight),
             (Snake.Direction)(_random.Next() % 4));
 
-        MakeFood(s, out byte foodX, out byte foodY);
-
-        long gameTime = Environment.TickCount64;
-
-        while (true)
-        {
-            fb.Clear();
-
-            if (!s.Update())
-            {
-                s.Draw(ref fb);
-                return Result.Loss;
-            }
-
-            s.Draw(ref fb);
-
-            if (Console.KeyAvailable)
-            {
-                ConsoleKeyInfo ki = Console.ReadKey(intercept: true);
-                switch (ki.Key)
-                {
-                    case ConsoleKey.UpArrow:
-                        s.Course = Snake.Direction.Up; break;
-                    case ConsoleKey.DownArrow:
-                        s.Course = Snake.Direction.Down; break;
-                    case ConsoleKey.LeftArrow:
-                        s.Course = Snake.Direction.Left; break;
-                    case ConsoleKey.RightArrow:
-                        s.Course = Snake.Direction.Right; break;
-                }
-            }
-
-            if (s.HitTest(foodX, foodY))
-            {
-                if (s.Extend())
-                    MakeFood(s, out foodX, out foodY);
-                else
-                    return Result.Win;
-            }
-
-            fb.SetPixel(foodX, foodY, '*');
-
-            fb.Render();
-
-            gameTime += 100;
-
-            long delay = gameTime - Environment.TickCount64;
-            if (delay >= 0)
-                Thread.Sleep((int)delay);
-            else
-                gameTime = Environment.TickCount64;
-        }
+        MakeFood(s, out foodX, out foodY);
     }
 
-    void MakeFood(in Snake snake, out byte foodX, out byte foodY)
+    Result Update()
+    {
+        music.PlayTune();
+
+        if (!s.Update())
+        {
+            s.Draw();
+            return Result.Loss;
+        }
+
+        s.Draw();
+
+        switch ((*W4.GAMEPAD1)) // just handle single key
+        {
+            case W4.BUTTON_UP:
+                s.Course = Snake.Direction.Up; break;
+            case W4.BUTTON_DOWN:
+                s.Course = Snake.Direction.Down; break;
+            case W4.BUTTON_LEFT:
+                s.Course = Snake.Direction.Left; break;
+            case W4.BUTTON_RIGHT:
+                s.Course = Snake.Direction.Right; break;
+        }
+
+        if (s.HitTest(foodX, foodY))
+        {
+            if (s.Extend())
+                MakeFood(s, out foodX, out foodY);
+            else
+                return Result.Win;
+        }
+
+        fixed (byte* spAddr = &(foodSprite[0]))
+        {
+            W4.blit(spAddr, foodX << 2, foodY << 2, 4, 4, W4.BLIT_1BPP);
+        }
+
+        return Result.None;
+    }
+
+    static void MakeFood(in Snake snake, out byte foodX, out byte foodY)
     {
         do
         {
-            foodX = (byte)(_random.Next() % FrameBuffer.Width);
-            foodY = (byte)(_random.Next() % FrameBuffer.Height);
+            foodX = (byte)(_random.Next() % boardWidth);
+            foodY = (byte)(_random.Next() % boardHeight);
         }
         while (snake.HitTest(foodX, foodY));
     }
 
-    public static void Main()
+    void Main()
     {
-        Console.SetWindowSize(FrameBuffer.Width, FrameBuffer.Height);
-        Console.SetBufferSize(FrameBuffer.Width, FrameBuffer.Height);
-        Console.Title = "See Sharp Snake";
-        Console.CursorVisible = false;
+        Result result = Update();
 
-        FrameBuffer fb = new FrameBuffer();
-
-        while (true)
+        if (result != Result.None)
         {
-            Game g = new Game((uint)Environment.TickCount64);
-            Result result = g.Run(ref fb);
-
             string message = result == Result.Win ? "You win" : "You lose";
 
-            int position = (FrameBuffer.Width - message.Length) / 2;
-            for (int i = 0; i < message.Length; i++)
+            fixed (char* fixedMsg = message)
             {
-                fb.SetPixel(position + i, FrameBuffer.Height / 2, message[i]);
+                W4.textUtf16((byte*) fixedMsg, (uint) message.Length * 2, 70, 40);
             }
-
-            fb.Render();
-
-            Console.ReadKey(intercept: true);
         }
     }
 }
+

@@ -9,10 +9,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="Game/FrameBuffer.cs" />
     <Compile Include="Game/Game.cs" />
     <Compile Include="Game/Random.cs" />
     <Compile Include="Game/Snake.cs" />
+    <Compile Include="Game\Music.cs" />
+    <Compile Include="W4.cs" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(IncludePal)' == 'true'">
