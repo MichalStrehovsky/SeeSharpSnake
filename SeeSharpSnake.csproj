@@ -1,4 +1,5 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<?xml version="1.0" encoding="windows-1251"?>
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -44,7 +45,7 @@
     <Compile Include="Pal/Console.cs" />
     <Compile Include="Pal/UefiEnvironment.cs" />
     <Compile Include="Pal/UefiApplication.cs" />
-	<Compile Include="Pal/RuntimeInformation.Uefi.cs" />
+    <Compile Include="Pal/RuntimeInformation.Uefi.cs" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(Mode)' != ''">
