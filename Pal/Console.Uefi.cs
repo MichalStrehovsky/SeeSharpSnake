@@ -84,7 +84,6 @@
 
         unsafe static void WriteChar(EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* ConOut, char data)
         {
-            // Translate some unicode characters into the IBM hardware codepage
             char* x = stackalloc char[2];
             x[0] = data;
             x[1] = '\0';
