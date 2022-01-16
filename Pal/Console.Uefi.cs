@@ -33,14 +33,10 @@
         {
             get
             {
-                if (lastKey == '\0')
-                {
-                    return true;
-                }
-
                 EFI_INPUT_KEY key;
                 var errorCode = EfiRuntimeHost.SystemTable->ConIn->ReadKeyStroke(EfiRuntimeHost.SystemTable->ConIn, &key);
                 lastKey = (char)key.UnicodeChar;
+                lastScanCode = key.ScanCode;
                 return errorCode == 0;
             }
         }
@@ -52,16 +48,7 @@
 
         public static unsafe ConsoleKeyInfo ReadKey(bool intercept)
         {
-            if (lastKey == '\0')
-            {
-                EFI_INPUT_KEY key;
-                var errorCode = EfiRuntimeHost.SystemTable->ConIn->ReadKeyStroke(EfiRuntimeHost.SystemTable->ConIn, &key);
-                lastKey = (char)key.UnicodeChar;
-                lastScanCode = key.ScanCode;
-            }
-
             char c = lastKey;
-
             ConsoleKey k = default;
             if (lastScanCode != 0)
             {
