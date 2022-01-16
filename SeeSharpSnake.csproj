@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -42,8 +42,8 @@
     <Compile Include="Pal/Environment.Uefi.cs" />
     <Compile Include="Pal/Console.Uefi.cs" />
     <Compile Include="Pal/Console.cs" />
-    <Compile Include="UefiEnvironment.cs" />
-    <Compile Include="UefiApplication.cs" />
+    <Compile Include="Pal/UefiEnvironment.cs" />
+    <Compile Include="Pal/UefiApplication.cs" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(Mode)' != ''">

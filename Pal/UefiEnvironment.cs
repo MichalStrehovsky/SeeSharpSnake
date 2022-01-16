@@ -173,11 +173,6 @@ public unsafe readonly struct EFI_BOOT_SERVICES
     private readonly IntPtr _SetMem;
     private readonly IntPtr _CreateEventEx;
 
-    public ulong WaitForEvent(uint NumberOfEvents, IntPtr* eventArray, uint* Index)
-    {
-        return RawCalliHelper.StdCall(_WaitForEvent, NumberOfEvents, eventArray, Index);
-    }
-
     public ulong Stall(uint Microseconds)
     {
         return RawCalliHelper.StdCall(_Stall, Microseconds);
@@ -199,25 +194,9 @@ public unsafe readonly struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL
 
     public readonly SIMPLE_TEXT_OUTPUT_MODE* Mode;
 
-    public void Reset(void* handle, bool ExtendedVerification)
-    {
-        RawCalliHelper.StdCall(_reset, (byte*)handle, &ExtendedVerification);
-    }
     public ulong OutputString(void* handle, char* str)
     {
         return RawCalliHelper.StdCall(_outputString, (byte*)handle, str);
-    }
-    public ulong TestString(void* handle, char* str)
-    {
-        return RawCalliHelper.StdCall(_testString, (byte*)handle, str);
-    }
-    public void QueryMode(void* handle, uint ModeNumber, uint* Columns, uint* Rows)
-    {
-        RawCalliHelper.StdCall(_queryMode, (byte*)handle, &ModeNumber, Columns, Rows);
-    }
-    public void SetMode(void* handle, uint ModeNumber)
-    {
-        RawCalliHelper.StdCall(_setMode, (byte*)handle, &ModeNumber);
     }
     public void SetAttribute(void* handle, uint Attribute)
     {
