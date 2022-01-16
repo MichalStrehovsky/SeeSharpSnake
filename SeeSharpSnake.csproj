@@ -71,6 +71,8 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
     <IlcSystemModule>SeeSharpSnake</IlcSystemModule>
+    <SelfContained>false</SelfContained>
+    <UseAppHost>false</UseAppHost>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(Mode)' == 'CoreRT-NoRuntime'">
