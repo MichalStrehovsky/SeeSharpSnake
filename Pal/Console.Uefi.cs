@@ -2,12 +2,6 @@
 {
     public static class Console
     {
-        static ushort s_consoleAttribute;
-        static ushort s_cursorX;
-        static ushort s_cursorY;
-        static ushort s_windowSizeX;
-        static ushort s_windowSizeY;
-
         public static unsafe string Title
         {
             set
@@ -27,8 +21,7 @@
         {
             set
             {
-                s_consoleAttribute = (ushort)value;
-                uint color = s_consoleAttribute;
+                uint color = (ushort)value;
                 EfiRuntimeHost.SystemTable->ConOut->SetAttribute(EfiRuntimeHost.SystemTable->ConOut, color);
             }
         }
@@ -97,8 +90,6 @@
 
         public static unsafe void SetWindowSize(int x, int y)
         {
-            s_windowSizeX = (ushort)x;
-            s_windowSizeY = (ushort)y;
         }
 
         public static void SetBufferSize(int x, int y)
@@ -107,8 +98,6 @@
 
         public unsafe static void SetCursorPosition(int x, int y)
         {
-            s_cursorX = (ushort)x;
-            s_cursorY = (ushort)y;
             EfiRuntimeHost.SystemTable->ConOut->SetCursorPosition(
                 EfiRuntimeHost.SystemTable->ConOut,
                 (uint)x,
