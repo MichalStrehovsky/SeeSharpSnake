@@ -62,16 +62,7 @@
 
             char c = lastKey;
 
-            // Interpret WASD as arrow keys.
             ConsoleKey k = default;
-            if (c == 'w')
-                k = ConsoleKey.UpArrow;
-            else if (c == 'd')
-                k = ConsoleKey.RightArrow;
-            else if (c == 's')
-                k = ConsoleKey.DownArrow;
-            else if (c == 'a')
-                k = ConsoleKey.LeftArrow;
             if (lastScanCode != 0)
             {
                 k = lastScanCode switch
