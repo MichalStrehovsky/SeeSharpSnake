@@ -4,7 +4,6 @@ namespace System
     {
         public static unsafe long TickCount64
         {
-            // Mark no inlining so that we get "volatile" semantics
             get
             {
                 EfiRuntimeHost.SystemTable->RuntimeServices->GetTime(out var time, out var capabilities);
