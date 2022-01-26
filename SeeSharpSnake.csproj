@@ -6,6 +6,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <PublishSingleFile Condition="'$(Mode)' == ''">true</PublishSingleFile>
     <EnableDefaultItems>false</EnableDefaultItems>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -30,10 +31,20 @@
     <Compile Include="Pal/RuntimeInformation.Linux.cs" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(Mode)' == 'CoreRT-NoRuntime'">
+  <ItemGroup Condition="'$(Mode)' == 'CoreRT-NoRuntime' or '$(Mode)' == 'CoreRT-Uefi'">
     <Compile Include="MiniBCL.cs" />
     <Compile Include="MiniRuntime.cs" />
     <Compile Include="MiniRuntime.Dos.cs" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(Mode)' == 'CoreRT-Uefi'">
+    <Compile Include="Pal/Thread.Uefi.cs" />
+    <Compile Include="Pal/Environment.Uefi.cs" />
+    <Compile Include="Pal/Console.Uefi.cs" />
+    <Compile Include="Pal/Console.cs" />
+    <Compile Include="Pal/UefiEnvironment.cs" />
+    <Compile Include="Pal/UefiApplication.cs" />
+    <Compile Include="Pal/RuntimeInformation.Uefi.cs" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(Mode)' != ''">
@@ -60,28 +71,69 @@
     <IlcDisableReflection>true</IlcDisableReflection>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Mode)' == 'CoreRT-NoRuntime'">
+  <PropertyGroup Condition="'$(Mode)' == 'CoreRT-NoRuntime' or '$(Mode)' == 'CoreRT-Uefi'">
     <NoStdLib>true</NoStdLib>
     <NoConfig>true</NoConfig>
     <RuntimeMetadataVersion>v4.0.30319</RuntimeMetadataVersion>
     <Optimize>true</Optimize>
     <IlcOptimizationPreference>Size</IlcOptimizationPreference>
     <IlcDisableReflection>true</IlcDisableReflection>
-    <IncludePal>true</IncludePal>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
     <IlcSystemModule>SeeSharpSnake</IlcSystemModule>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Mode)' == 'CoreRT-NoRuntime'">
+    <IncludePal>true</IncludePal>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(Mode)' == 'CoreRT-NoRuntime'">
     <LinkerArg Include="/subsystem:console /entry:__managed__Main /merge:.modules=.rdata /merge:.pdata=.rdata /DYNAMICBASE:NO /filealign:16 /align:16" />
   </ItemGroup>
 
-  <Target Name="CustomizeReferences" BeforeTargets="BeforeCompile" AfterTargets="FindReferenceAssembliesForReferences" Condition="'$(Mode)' == 'CoreRT-NoRuntime'">
+  <ItemGroup Condition="'$(Mode)' == 'CoreRT-Uefi'">
+    <LinkerArg Include="/subsystem:EFI_APPLICATION /entry:EfiMain" />
+  </ItemGroup>
+
+  <Target Name="CustomizeReferences" BeforeTargets="BeforeCompile" AfterTargets="FindReferenceAssembliesForReferences"
+          Condition="'$(Mode)' == 'CoreRT-NoRuntime' or '$(Mode)' == 'CoreRT-Uefi'">
     <ItemGroup>
       <ReferencePathWithRefAssemblies Remove="@(ReferencePathWithRefAssemblies)" />
       <ReferencePath Remove="@(ReferencePath)" />
     </ItemGroup>
+  </Target>
+  
+  <Target Name="GenerateVirtuaDisk" AfterTargets="Publish"
+          Condition="'$(Mode)' == 'CoreRT-Uefi'">
+    <PropertyGroup>
+      <VHD>$(MSBuildProjectDirectory)\$(NativeOutputPath)seesharpsnake.vhdx</VHD>
+      <CreatePartitionCommand>
+        create vdisk file=$(VHD) maximum=40
+        select vdisk file=$(VHD)
+        attach vdisk
+        convert gpt
+        create partition efi
+        format quick fs=fat32 label="System"
+        assign letter="X"
+        exit
+      </CreatePartitionCommand>
+      <CreatePartitionCommand2>
+        select vdisk file=$(VHD)
+        select partition 1
+        remove letter=X
+        detach vdisk
+        exit
+      </CreatePartitionCommand2>
+    </PropertyGroup>
+
+    <Delete Files="$(VHD)" />
+
+    <WriteLinesToFile File="$(NativeOutputPath)diskpart1.txt" Overwrite="true" Lines="$(CreatePartitionCommand)" />
+
+    <WriteLinesToFile File="$(NativeOutputPath)diskpart2.txt" Overwrite="true" Lines="$(CreatePartitionCommand2)" />
+    <Exec Command="diskpart /s &quot;$(MSBuildProjectDirectory)\$(NativeOutputPath)diskpart1.txt&quot;" />
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\$(NativeOutputPath)$(TargetName)$(NativeBinaryExt)" DestinationFiles="X:\EFI\BOOT\BOOTX64.efi" />
+    <Exec Command="diskpart /s &quot;$(MSBuildProjectDirectory)\$(NativeOutputPath)diskpart2.txt&quot;" />
   </Target>
 
 </Project>
