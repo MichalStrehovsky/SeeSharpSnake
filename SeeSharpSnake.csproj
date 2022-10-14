@@ -48,7 +48,7 @@
     <Compile Include="Pal/RuntimeInformation.Uefi.cs" />
   </ItemGroup>
 
-  <PropertyGroup Condition="'$(Mode)' == 'NativeAOT-Moderate' or '$(Mode)' == 'NativeAOT-ReflectionFree' or '$(Mode)' == 'NativeAOT-ReflectionFree-UPX'">
+  <PropertyGroup Condition="'$(Mode)' == 'NativeAOT-Moderate' or '$(Mode)' == 'NativeAOT-UPX' or '$(Mode)' == 'NativeAOT-ReflectionFree' or '$(Mode)' == 'NativeAOT-ReflectionFree-UPX'">
     <IlcGenerateCompleteTypeMetadata>false</IlcGenerateCompleteTypeMetadata>
     <IlcOptimizationPreference>Size</IlcOptimizationPreference>
   </PropertyGroup>
@@ -86,6 +86,12 @@
   <ItemGroup Condition="'$(Mode)' == 'NativeAOT-Uefi'">
     <LinkerArg Include="/subsystem:EFI_APPLICATION /entry:EfiMain" />
   </ItemGroup>
+
+  <PropertyGroup Condition="'$(Mode)' == 'NativeAOT-UPX'">
+    <EventSourceSupport>false</EventSourceSupport>
+    <UseSystemResourceKeys>true</UseSystemResourceKeys>
+    <InvariantGlobalization>true</InvariantGlobalization>
+  </PropertyGroup>
 
   <ItemGroup Condition="'$(Mode)' == 'NativeAOT-UPX' or '$(Mode)' == 'NativeAOT-ReflectionFree-UPX'">
     <PackageReference Include="PublishAotCompressed" Version="0.0.4" />

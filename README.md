@@ -38,13 +38,13 @@ dotnet publish -r win-x64 -c Release /p:Mode=NativeAOT
 dotnet publish -r win-x64 -c Release /p:Mode=NativeAOT-Moderate
 ```
 
-### To build the 1.2 MB version of the game (no reflection)
+### To build the 1.2 MB version of the game
 
 ```
 dotnet publish -r win-x64 -c Release /p:Mode=NativeAOT-ReflectionFree
 ```
 
-### To build the 1.2 MB version of the game (packed)
+### To build the 820 KB version of the game
 
 ```
 dotnet publish -r win-x64 -c Release /p:Mode=NativeAOT-UPX
