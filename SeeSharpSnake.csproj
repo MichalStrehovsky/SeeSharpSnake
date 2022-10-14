@@ -48,18 +48,18 @@
     <Compile Include="Pal/RuntimeInformation.Uefi.cs" />
   </ItemGroup>
 
-  <PropertyGroup Condition="'$(Mode)' == 'NativeAOT-Moderate' or '$(Mode)' == 'NativeAOT-ReflectionFree'">
+  <PropertyGroup Condition="'$(Mode)' == 'NativeAOT-Moderate' or '$(Mode)' == 'NativeAOT-ReflectionFree' or '$(Mode)' == 'NativeAOT-ReflectionFree-UPX'">
     <IlcGenerateCompleteTypeMetadata>false</IlcGenerateCompleteTypeMetadata>
     <IlcOptimizationPreference>Size</IlcOptimizationPreference>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Mode)' == 'NativeAOT-ReflectionFree' or '$(Mode)' == 'NativeAOT-NoRuntime'">
+  <PropertyGroup Condition="'$(Mode)' == 'NativeAOT-ReflectionFree' or '$(Mode)' == 'NativeAOT-ReflectionFree-UPX' or '$(Mode)' == 'NativeAOT-NoRuntime'">
     <IlcGenerateStackTraceData>false</IlcGenerateStackTraceData>
     <IlcInvariantGlobalization>true</IlcInvariantGlobalization>
     <IlcFoldIdenticalMethodBodies>true</IlcFoldIdenticalMethodBodies>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Mode)' == 'NativeAOT-ReflectionFree'">
+  <PropertyGroup Condition="'$(Mode)' == 'NativeAOT-ReflectionFree' or '$(Mode)' == 'NativeAOT-ReflectionFree-UPX'">
     <IlcDisableReflection>true</IlcDisableReflection>
   </PropertyGroup>
 
@@ -85,6 +85,10 @@
 
   <ItemGroup Condition="'$(Mode)' == 'NativeAOT-Uefi'">
     <LinkerArg Include="/subsystem:EFI_APPLICATION /entry:EfiMain" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(Mode)' == 'NativeAOT-UPX' or '$(Mode)' == 'NativeAOT-ReflectionFree-UPX'">
+    <PackageReference Include="PublishAotCompressed" Version="0.0.4" />
   </ItemGroup>
 
   <Target Name="CustomizeReferences" BeforeTargets="BeforeCompile" AfterTargets="FindReferenceAssembliesForReferences"
