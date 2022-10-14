@@ -16,7 +16,7 @@ The project files and scripts in this repo build the same game (Snake clone) in 
 dotnet publish -r win-x64 -c Release
 ```
 
-### To build the 25 MB version of the game
+### To build the 11 MB version of the game
 
 ```
 dotnet publish -r win-x64 -c Release /p:PublishTrimmed=true
@@ -26,34 +26,46 @@ dotnet publish -r win-x64 -c Release /p:PublishTrimmed=true
 
 Make sure you have Visual Studio 2019 installed (Community edition is free) and include C/C++ development tools with Windows SDK (we need a tiny fraction of that - the platform linker and Win32 import libraries).
 
-### To build the 4.7 MB version of the game
+### To build the 3.57 MB version of the game
 
 ```
-dotnet publish -r win-x64 -c Release /p:Mode=CoreRT
+dotnet publish -r win-x64 -c Release /p:Mode=NativeAOT
 ```
 
-### To build the 4.3 MB version of the game
+### To build the 3.52 MB version of the game
 
 ```
-dotnet publish -r win-x64 -c Release /p:Mode=CoreRT-Moderate
+dotnet publish -r win-x64 -c Release /p:Mode=NativeAOT-Moderate
 ```
 
-### To build the 3.0 MB version of the game
+### To build the 2.2 MB version of the game
 
 ```
-dotnet publish -r win-x64 -c Release /p:Mode=CoreRT-High
+dotnet publish -r win-x64 -c Release /p:Mode=NativeAOT-High
 ```
 
 ### To build the 1.2 MB version of the game
 
 ```
-dotnet publish -r win-x64 -c Release /p:Mode=CoreRT-ReflectionFree
+dotnet publish -r win-x64 -c Release /p:Mode=NativeAOT-ReflectionFree
+```
+
+### To build the 820 KB version of the game
+
+```
+dotnet publish -r win-x64 -c Release /p:Mode=NativeAOT-UPX
+```
+
+### To build the 493 KB version of the game
+
+```
+dotnet publish -r win-x64 -c Release /p:Mode=NativeAOT-ReflectionFree-UPX
 ```
 
 ### To build the 10 kB version of the game
 
 ```
-dotnet publish -r win-x64 -c Release /p:Mode=CoreRT-NoRuntime
+dotnet publish -r win-x64 -c Release /p:Mode=NativeAOT-NoRuntime
 ```
 
 ### To build the 8 kB version of the game
