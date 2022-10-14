@@ -2,9 +2,10 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <PublishSingleFile Condition="'$(Mode)' == ''">true</PublishSingleFile>
+    <PublishAot Condition="'$(Mode)' != ''">true</PublishAot>
     <EnableDefaultItems>false</EnableDefaultItems>
     <LangVersion>8.0</LangVersion>
   </PropertyGroup>
@@ -31,13 +32,13 @@
     <Compile Include="Pal/RuntimeInformation.Linux.cs" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(Mode)' == 'CoreRT-NoRuntime' or '$(Mode)' == 'CoreRT-Uefi'">
+  <ItemGroup Condition="'$(Mode)' == 'NativeAOT-NoRuntime' or '$(Mode)' == 'NativeAOT-Uefi'">
     <Compile Include="MiniBCL.cs" />
     <Compile Include="MiniRuntime.cs" />
     <Compile Include="MiniRuntime.Dos.cs" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(Mode)' == 'CoreRT-Uefi'">
+  <ItemGroup Condition="'$(Mode)' == 'NativeAOT-Uefi'">
     <Compile Include="Pal/Thread.Uefi.cs" />
     <Compile Include="Pal/Environment.Uefi.cs" />
     <Compile Include="Pal/Console.Uefi.cs" />
@@ -47,31 +48,22 @@
     <Compile Include="Pal/RuntimeInformation.Uefi.cs" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(Mode)' != ''">
-    <PackageReference Include="Microsoft.DotNet.ILCompiler" Version="1.0.0-alpha-*" />
-  </ItemGroup>
-
-  <PropertyGroup Condition="'$(Mode)' == 'CoreRT-Moderate' or '$(Mode)' == 'CoreRT-High' or '$(Mode)' == 'CoreRT-ReflectionFree'">
+  <PropertyGroup Condition="'$(Mode)' == 'NativeAOT-Moderate' or '$(Mode)' == 'NativeAOT-ReflectionFree'">
     <IlcGenerateCompleteTypeMetadata>false</IlcGenerateCompleteTypeMetadata>
     <IlcOptimizationPreference>Size</IlcOptimizationPreference>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Mode)' == 'CoreRT-High' or '$(Mode)' == 'CoreRT-ReflectionFree' or '$(Mode)' == 'CoreRT-NoRuntime'">
+  <PropertyGroup Condition="'$(Mode)' == 'NativeAOT-ReflectionFree' or '$(Mode)' == 'NativeAOT-NoRuntime'">
     <IlcGenerateStackTraceData>false</IlcGenerateStackTraceData>
     <IlcInvariantGlobalization>true</IlcInvariantGlobalization>
     <IlcFoldIdenticalMethodBodies>true</IlcFoldIdenticalMethodBodies>
   </PropertyGroup>
 
-  <ItemGroup Condition="'$(Mode)' == 'CoreRT-High'">
-      <IlcArg Include="--removefeature:EventSource" />
-      <IlcArg Include="--removefeature:FrameworkStrings" />
-  </ItemGroup>
-
-  <PropertyGroup Condition="'$(Mode)' == 'CoreRT-ReflectionFree'">
+  <PropertyGroup Condition="'$(Mode)' == 'NativeAOT-ReflectionFree'">
     <IlcDisableReflection>true</IlcDisableReflection>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Mode)' == 'CoreRT-NoRuntime' or '$(Mode)' == 'CoreRT-Uefi'">
+  <PropertyGroup Condition="'$(Mode)' == 'NativeAOT-NoRuntime' or '$(Mode)' == 'NativeAOT-Uefi'">
     <NoStdLib>true</NoStdLib>
     <NoConfig>true</NoConfig>
     <RuntimeMetadataVersion>v4.0.30319</RuntimeMetadataVersion>
@@ -83,20 +75,20 @@
     <IlcSystemModule>SeeSharpSnake</IlcSystemModule>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Mode)' == 'CoreRT-NoRuntime'">
+  <PropertyGroup Condition="'$(Mode)' == 'NativeAOT-NoRuntime'">
     <IncludePal>true</IncludePal>
   </PropertyGroup>
 
-  <ItemGroup Condition="'$(Mode)' == 'CoreRT-NoRuntime'">
+  <ItemGroup Condition="'$(Mode)' == 'NativeAOT-NoRuntime'">
     <LinkerArg Include="/subsystem:console /entry:__managed__Main /merge:.modules=.rdata /merge:.pdata=.rdata /DYNAMICBASE:NO /filealign:16 /align:16" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(Mode)' == 'CoreRT-Uefi'">
+  <ItemGroup Condition="'$(Mode)' == 'NativeAOT-Uefi'">
     <LinkerArg Include="/subsystem:EFI_APPLICATION /entry:EfiMain" />
   </ItemGroup>
 
   <Target Name="CustomizeReferences" BeforeTargets="BeforeCompile" AfterTargets="FindReferenceAssembliesForReferences"
-          Condition="'$(Mode)' == 'CoreRT-NoRuntime' or '$(Mode)' == 'CoreRT-Uefi'">
+          Condition="'$(Mode)' == 'NativeAOT-NoRuntime' or '$(Mode)' == 'NativeAOT-Uefi'">
     <ItemGroup>
       <ReferencePathWithRefAssemblies Remove="@(ReferencePathWithRefAssemblies)" />
       <ReferencePath Remove="@(ReferencePath)" />
@@ -104,7 +96,7 @@
   </Target>
   
   <Target Name="GenerateVirtuaDisk" AfterTargets="Publish"
-          Condition="'$(Mode)' == 'CoreRT-Uefi'">
+          Condition="'$(Mode)' == 'NativeAOT-Uefi'">
     <PropertyGroup>
       <VHD>$(MSBuildProjectDirectory)\$(NativeOutputPath)seesharpsnake.vhdx</VHD>
       <CreatePartitionCommand>
@@ -134,6 +126,13 @@
     <Exec Command="diskpart /s &quot;$(MSBuildProjectDirectory)\$(NativeOutputPath)diskpart1.txt&quot;" />
     <Copy SourceFiles="$(MSBuildProjectDirectory)\$(NativeOutputPath)$(TargetName)$(NativeBinaryExt)" DestinationFiles="X:\EFI\BOOT\BOOTX64.efi" />
     <Exec Command="diskpart /s &quot;$(MSBuildProjectDirectory)\$(NativeOutputPath)diskpart2.txt&quot;" />
+  </Target>
+
+  <!-- The AOT compiler would want to mirror these as AppContext switches. Prevent that. -->
+  <Target Name="RemoveHostConfigurationOptions" BeforeTargets="WriteIlcRspFileForCompilation" DependsOnTargets="PrepareForILLink" Condition="'$(Mode)' == 'NativeAOT-NoRuntime'">
+    <ItemGroup>
+      <RuntimeHostConfigurationOption Remove="@(RuntimeHostConfigurationOption)" />
+    </ItemGroup>
   </Target>
 
 </Project>
